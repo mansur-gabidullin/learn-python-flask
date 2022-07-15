@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Поиск вакансий на hh.ru</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                {% for endpoint, title in menu %}
+                    {% set active = current_endpoint == endpoint %}
+                    <li class="nav-item">
+                        <a
+                            class="nav-link {% if active %}active{% endif %}"
+                            {% if active %}aria-current="page"{% endif %}
+                            href="{{ url_for(endpoint) }}"
+                        >
+                            {{title}}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</nav>

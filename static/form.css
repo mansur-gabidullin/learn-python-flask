@@ -1,0 +1,32 @@
+select:required:invalid {
+    color: gray;
+}
+
+.bootstrap-select > .btn {
+    border: 1px solid #ced4da;
+}
+
+.form-wrapper {
+    position: relative;
+}
+
+form {
+    width: 100%;
+}
+
+.sheet {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    height: 100%;
+    width: 100%;
+    opacity: .4;
+    z-index: 1;
+}
+
+.spinner-border {
+    display: none;
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+}
