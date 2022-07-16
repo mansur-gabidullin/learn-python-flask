@@ -1,3 +1,5 @@
+from itertools import chain
+
 import requests
 from collections import Counter
 
@@ -8,16 +10,22 @@ headers = {
 }
 
 
-def get_areas():
+def fetch_areas():
     session = _get_session()
     countries = session.get(f'{BASE_URL}/areas/').json()
-    areas = []
-    for country in countries:
-        regions = country.get('areas')
-        areas.extend(regions)
-        for region in regions:
-            areas.extend(region.get('areas'))
-    return areas
+
+    def flat_areas(areas):
+        return chain(
+            areas,
+            chain.from_iterable(
+                map(
+                    lambda a: flat_areas(a.get('areas')),
+                    areas
+                )
+            )
+        )
+
+    return list(flat_areas(countries))
 
 
 def get_vacancies_info(job_tile, area_id):
