@@ -3,10 +3,10 @@
 <p>Что нужно сделать:</p>
 <ul>
     <li>
-        в корне проекта выполнить следующие команды:
-        <br/>
-        <b>export FLASK_ENV=development</b> 
-        <br/>
+        в корне проекта выполнить следующие команды: <br/>
+        <b>export FLASK_ENV=development</b> <br/>
+        <b>flask db-init</b> <br/>
+        <b>flask db-seed</b> <br/>
         <b>flask run</b> 
     </li>
     <li>
@@ -17,3 +17,8 @@
     <li>написать название вакансии</li>
     <li>запустить поиск</li>
 </ul>
+
+<p>Комманда <b>export FLASK_ENV=development</b> выставляет переменную окружения FLASK_ENV в режим разработки.</p>
+<p>Комманда <b>flask db-init</b> создает базу данных и необходимые таблицы.</p>
+<p>Комманда <b>flask db-seed</b> заполняет базу данных предварительными данными.</p>
+<p>Комманда <b>flask run</b> запускает flask.</p>
