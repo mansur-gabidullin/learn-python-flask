@@ -83,12 +83,6 @@ def db_seed_command():
     click.echo('DB seeded.')
 
 
-def init_app(app):
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
-    app.cli.add_command(db_seed_command)
-
-
 def get_areas():
     db = get_db()
     cursor = db.cursor()
