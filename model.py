@@ -40,6 +40,5 @@ class VacancySkill(Base):
 class VacancySalary(Base):
     __tablename__ = 'vacancy_salary'
 
-    id = Column(Integer, primary_key=True)
-    salary = Column(Numeric(precision=2), nullable=False)
+    salary = Column(Numeric(precision=2), primary_key=True, nullable=False)
     vacancy_id = Column(Integer, ForeignKey("vacancy.id"), nullable=False)
