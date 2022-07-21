@@ -5,8 +5,8 @@
     <li>
         в корне проекта выполнить следующие команды: <br/>
         <b>export FLASK_ENV=development</b> <br/>
-        <b>flask db-init</b> <br/>
-        <b>flask db-seed</b> <br/>
+        <b>flask create-db</b> <br/>
+        <b>flask seed-db</b> <br/>
         <b>flask run</b> 
     </li>
     <li>

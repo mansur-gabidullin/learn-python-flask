@@ -1,15 +1,8 @@
-import json
-
-from flask import session as flask_session, render_template, redirect, url_for, request
-
-from service import menu, get_vacancies_info, get_areas, get_area_by_id, close_db, init_db_command, db_seed_command
+from flask import session, render_template, redirect, url_for, request
+from service import menu, get_vacancies_info, get_areas, parse_vacancies_and_save_to_db, get_area_by_id
 
 
-def init_controller(app):
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
-    app.cli.add_command(db_seed_command)
-
+def init(app):
     @app.get('/')
     def index():
         return render_template('index.html', menu=menu, current_endpoint='index')
@@ -23,33 +16,33 @@ def init_controller(app):
     def search():
         job_title = request.form['job_title']
         area_id = request.form['area_id']
-        all_found, mean_salary_info, skills, vacancies_info = get_vacancies_info(job_title, area_id)
 
-        model = {
-            'all_found': all_found,
-            'mean_salary_info': mean_salary_info,
-            'skills': skills,
-            'vacancies_info': vacancies_info,
-        }
+        vacancies = parse_vacancies_and_save_to_db(job_title, area_id)
 
-        with open('data.json', 'wt', encoding='utf-8') as file:
-            json.dump(model, file)
-
-        flask_session['area_id'] = area_id
-        flask_session['job_title'] = job_title
+        session['vacancy_ids'] = list(vacancy.id for vacancy in vacancies)
+        session['area_id'] = area_id
+        session['job_title'] = job_title
 
         return redirect(url_for('results'))
 
     @app.get('/results')
     def results():
-        job_title = flask_session.get('job_title')
-        area_id = flask_session.get('area_id')
+        job_title = session.get('job_title')
+        area_id = session.get('area_id')
 
         if not job_title:
             return redirect(url_for('form'))
 
-        with open('data.json', 'rt', encoding='utf-8') as file:
-            model = json.load(file)
+        vacancy_ids = session['vacancy_ids']
+        all_found, mean_salary_info, skills, skills_info = get_vacancies_info(vacancy_ids)
+
+        model = {
+            'all_found': all_found,
+            'mean_salary_info': mean_salary_info,
+            'skills': skills,
+            'skills_count': len(skills),
+            'skills_info': skills_info,
+        }
 
         if model is None:
             return redirect(url_for('form'))
@@ -61,12 +54,11 @@ def init_controller(app):
             'current_endpoint': 'results',
             'model': model,
             'job_title': job_title,
-            'area_name': area['name'],
+            'area_name': area.name,
         }
 
         template = render_template('results.html', **data)
-
-        flask_session.clear()
+        session.clear()
 
         return template
 
