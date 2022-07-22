@@ -14,7 +14,7 @@
 
 <h4>Средняя зарплата: <span class="text-primary">{{model.mean_salary_info}}</span></h4>
 
-<h4>Навыки:</h4>
+<h4>Навыки ({{model.skills_count}}):</h4>
 <p>
     {% for skill in model.skills %}
     <span class="badge rounded-pill text-bg-primary">{{skill}}</span>
@@ -23,7 +23,7 @@
 
 <h4>Навыки, отсортированные по частоте указания в вакансиях:</h4>
 <ul class="list-group">
-    {% for info in model.vacancies_info %}
+    {% for info in model.skills_info %}
     <li class="list-group-item">{{info}}</li>
     {% endfor %}
 </ul>
